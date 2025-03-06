@@ -11,7 +11,7 @@ pipeline {
         stage('Build and Run Containers') {
             steps {
                 script {
-                    sh 'docker compose -f stack-billing.yml up -d --build'
+                    sh 'docker-compose -f stack-billing.yml up -d --build'
                 }
             }
         }
