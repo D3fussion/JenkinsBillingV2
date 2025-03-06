@@ -56,26 +56,27 @@ pipeline {
         }
 
         stage('Test Frontend - Verificar Array en localhost:80') {
-            steps {
-                script {
-                    echo "Esperando que el frontend esté disponible..."
-                    sh 'sleep 10'
+    steps {
+        script {
+            echo "Esperando que el frontend esté disponible..."
+            sh 'sleep 10'
 
-                    sh '''
-                    RESPONSE=$(curl -s http://localhost:80)
-                    echo "Respuesta del frontend: $RESPONSE"
+            sh '''
+            RESPONSE=$(curl -s http://localhost:80)
+            echo "Respuesta del frontend: $RESPONSE"
 
-                    # Verifica si la respuesta es un array (empieza con '[')
-                    if [[ "$RESPONSE" =~ ^\[ ]]; then
-                        echo "El frontend devolvió un array correctamente."
-                    else
-                        echo "ERROR: El frontend no devolvió un array."
-                        exit 1
-                    fi
-                    '''
-                }
-            }
+            # Verificar si la respuesta empieza con '[' usando grep
+            if echo "$RESPONSE" | grep -q '^\['; then
+                echo "El frontend devolvió un array correctamente."
+            else
+                echo "ERROR: El frontend no devolvió un array."
+                exit 1
+            fi
+            '''
         }
+    }
+}
+
 
         stage('Test Backend - Obtener Datos de /billing') {
             steps {
